@@ -12,6 +12,8 @@ import {
 
 import { Check } from "@gravity-ui/icons";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 export default function RegisterPage() {
   const onSubmit = async (e) => {
@@ -23,6 +25,22 @@ export default function RegisterPage() {
     if (UserData.password !== UserData.confirmPassword) {
       alert("Passwords do not match");
       return;
+    }
+
+    const {data, error} = await authClient.signUp.email({
+        name: UserData.name,
+        email: UserData.email,
+        password: UserData.password,
+        role: UserData.role,
+        callbackUrl: "/",
+    })
+
+    if(data) {
+        alert("Registration successful!");
+        redirect("/");
+    }
+    if(error) {
+        alert("Registration failed: " + error);
     }
 
     console.log("Form Data:", UserData);
