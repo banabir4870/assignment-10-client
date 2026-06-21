@@ -140,7 +140,7 @@ export default function Navbar() {
             </button>
           ) : (
             <Link
-              href="/login"
+              href="/auth/login"
               className="rounded-full bg-[#C9A65B] px-6 py-2 text-white transition hover:bg-[#ab8635]"
             >
               Login
@@ -207,7 +207,7 @@ export default function Navbar() {
               </button>
             ) : (
               <Link
-                href="/login"
+                href="/auth/login"
                 className="block rounded-full bg-[#C9A65B] py-3 text-center text-white"
               >
                 Login
