@@ -32,6 +32,7 @@ export default function RegisterPage() {
         email: UserData.email,
         password: UserData.password,
         role: UserData.role,
+        plan: "free",
         callbackUrl: "/",
     })
 
