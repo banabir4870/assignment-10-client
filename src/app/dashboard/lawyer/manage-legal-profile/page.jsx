@@ -1,197 +1,258 @@
+"use client";
+
+import { useSession } from "@/lib/auth-client";
+import { useEffect, useState } from "react";
+
 export default function ManageLegalProfilePage() {
+    const { data: session } = useSession();
+    const userId = session?.user?.id;
+
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [hasProfile, setHasProfile] = useState(false);
+    const [imageFile, setImageFile] = useState(null);
+
+    const [form, setForm] = useState({
+        fullName: "",
+        specialization: "Corporate Law",
+        fee: "",
+        bio: "",
+        availability: "Available",
+        image: "",
+    });
+
+    const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
+
+    // -------------------------
+    // FETCH PROFILE (SAFE VERSION)
+    // -------------------------
+    const fetchProfile = async (id) => {
+        if (!id) return;
+
+        try {
+            setLoading(true);
+
+            const res = await fetch(`${SERVER_URL}/lawyer/profile/${id}`);
+            const data = await res.json();
+
+            if (data.exists) {
+                setHasProfile(true);
+                setForm({
+                    fullName: data.profile.fullName || "",
+                    specialization: data.profile.specialization || "Corporate Law",
+                    fee: data.profile.fee || "",
+                    bio: data.profile.bio || "",
+                    availability: data.profile.availability || "Available",
+                    image: data.profile.image || "",
+                });
+            } else {
+                setHasProfile(false);
+            }
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // -------------------------
+    // EFFECT (NO WARNING FIXED)
+    // -------------------------
+    useEffect(() => {
+        const load = async () => {
+            await fetchProfile(userId);
+        };
+        load();
+    }, [userId])
+
+    // -------------------------
+    // INPUT HANDLER
+    // -------------------------
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    // -------------------------
+    // IMGBB UPLOAD
+    // -------------------------
+    const uploadToImgBB = async (file) => {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const res = await fetch(
+            `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_KEY}`,
+            {
+                method: "POST",
+                body: formData,
+            }
+        );
+
+        const data = await res.json();
+        return data?.data?.url;
+    };
+
+    // -------------------------
+    // SAVE PROFILE
+    // -------------------------
+    const handleSave = async () => {
+        try {
+            setSaving(true);
+
+            let imageUrl = form.image;
+
+            if (imageFile) {
+                imageUrl = await uploadToImgBB(imageFile);
+            }
+
+            await fetch(`${SERVER_URL}/lawyer/profile`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userId,
+                    ...form,
+                    image: imageUrl,
+                }),
+            });
+
+            await fetchProfile(userId);
+
+            alert("Profile saved successfully!");
+        } catch (err) {
+            console.log(err);
+            alert("Error saving profile");
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    // -------------------------
+    // UI
+    // -------------------------
     return (
-        <div className="space-y-8">
+        <div className="p-6 space-y-6 bg-gray-100 min-h-screen text-gray-900">
 
-            <div className="rounded-3xl bg-[#1E293B] p-8 text-white">
-
-                <h1 className="text-4xl font-bold">
-                    Manage Legal Profile
-                </h1>
-
-                <p className="mt-2 text-gray-300">
-                    Create and manage your professional lawyer profile.
+            {/* HEADER */}
+            <div className="bg-slate-900 text-white p-6 rounded-2xl">
+                <h1 className="text-3xl font-bold">Manage Legal Profile</h1>
+                <p className="text-gray-300">
+                    Create and manage your lawyer profile
                 </p>
-
             </div>
 
-            <div className="grid gap-8 lg:grid-cols-3">
+            {/* STATUS */}
+            {!loading && (
+                <div
+                    className={`p-4 rounded-xl font-medium ${hasProfile
+                            ? "bg-green-100 text-green-900"
+                            : "bg-yellow-100 text-yellow-900"
+                        }`}
+                >
+                    {hasProfile
+                        ? "✔ Profile active - you can update anytime"
+                        : "⚠ Please complete your profile"}
+                </div>
+            )}
 
-                {/* Form */}
+            <div className="grid lg:grid-cols-3 gap-6">
 
-                <div className="lg:col-span-2 rounded-3xl bg-white p-8 shadow">
+                {/* FORM */}
+                <div className="lg:col-span-2 bg-white p-6 rounded-xl shadow space-y-4 border text-gray-900">
 
-                    <h2 className="mb-6 text-2xl font-bold text-[#1E293B]">
-                        Profile Information
-                    </h2>
+                    <input
+                        name="fullName"
+                        value={form.fullName}
+                        onChange={handleChange}
+                        placeholder="Lawyer Name"
+                        className="border p-3 w-full rounded text-gray-900 placeholder-gray-500"
+                    />
 
-                    <div className="space-y-5">
+                    <select
+                        name="specialization"
+                        value={form.specialization}
+                        onChange={handleChange}
+                        className="border p-3 w-full rounded text-gray-900"
+                    >
+                        <option>Corporate Law</option>
+                        <option>Family Law</option>
+                        <option>Criminal Law</option>
+                        <option>Property Law</option>
+                    </select>
 
-                        <div>
-                            <label className="mb-2 block font-medium text-[#1E293B]">
-                                Full Name
-                            </label>
+                    <input
+                        name="fee"
+                        value={form.fee}
+                        onChange={handleChange}
+                        placeholder="Consultation Fee"
+                        className="border p-3 w-full rounded text-gray-900 placeholder-gray-500"
+                    />
 
-                            <input
-                                type="text"
-                                placeholder="Enter full name"
-                                className="w-full rounded-xl border p-3 outline-none focus:border-[#C9A65B]"
-                            />
-                        </div>
+                    <select
+                        name="availability"
+                        value={form.availability}
+                        onChange={handleChange}
+                        className="border p-3 w-full rounded text-gray-900"
+                    >
+                        <option value="Available">Available</option>
+                        <option value="Busy">Busy</option>
+                    </select>
 
-                        <div>
-                            <label className="mb-2 block font-medium text-[#1E293B]">
-                                Specialization
-                            </label>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setImageFile(e.target.files[0])}
+                        className="border p-3 w-full rounded bg-white text-gray-900"
+                    />
 
-                            <select className="w-full rounded-xl border p-3 outline-none focus:border-[#C9A65B]">
+                    <textarea
+                        name="bio"
+                        value={form.bio}
+                        onChange={handleChange}
+                        placeholder="Professional Bio"
+                        className="border p-3 w-full rounded text-gray-900 placeholder-gray-500"
+                        rows={5}
+                    />
 
-                                <option>
-                                    Corporate Law
-                                </option>
-
-                                <option>
-                                    Family Law
-                                </option>
-
-                                <option>
-                                    Criminal Law
-                                </option>
-
-                                <option>
-                                    Property Law
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                        <div>
-
-                            <label className="mb-2 block font-medium text-[#1E293B]">
-                                Consultation Fee
-                            </label>
-
-                            <input
-                                type="number"
-                                placeholder="500"
-                                className="w-full rounded-xl border p-3 outline-none focus:border-[#C9A65B]"
-                            />
-
-                        </div>
-
-                        <div>
-
-                            <label className="mb-2 block font-medium text-[#1E293B]">
-                                Profile Image
-                            </label>
-
-                            <input
-                                type="file"
-                                className="w-full rounded-xl border p-3"
-                            />
-
-                        </div>
-
-                        <div>
-
-                            <label className="mb-2 block font-medium text-[#1E293B]">
-                                Professional Bio
-                            </label>
-
-                            <textarea
-                                rows={6}
-                                placeholder="Tell clients about yourself..."
-                                className="w-full rounded-xl border p-3 outline-none focus:border-[#C9A65B]"
-                            />
-
-                        </div>
-
-                        <div>
-
-                            <label className="mb-2 block font-medium text-[#1E293B]">
-                                Availability
-                            </label>
-
-                            <select className="w-full rounded-xl border p-3">
-
-                                <option>
-                                    Available
-                                </option>
-
-                                <option>
-                                    Busy
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                        <div className="flex gap-4">
-
-                            <button className="rounded-xl bg-[#C9A65B] px-8 py-3 text-white hover:bg-[#ab8635]">
-                                Save Changes
-                            </button>
-
-                            <button className="rounded-xl border px-8 py-3 text-red-400 hover:bg-red-50">
-                                Cancel
-                            </button>
-
-                        </div>
-
-                    </div>
-
+                    <button
+                        onClick={handleSave}
+                        disabled={saving}
+                        className="bg-amber-600 text-white px-6 py-3 rounded-lg hover:bg-amber-700"
+                    >
+                        {saving ? "Saving..." : "Save Profile"}
+                    </button>
                 </div>
 
-                {/* Preview */}
+                {/* PREVIEW */}
+                <div className="bg-white p-6 rounded-xl shadow text-center border text-gray-900">
 
-                <div className="rounded-3xl bg-white p-8 shadow">
+                    <img
+                        src={
+                            imageFile
+                                ? URL.createObjectURL(imageFile)
+                                : form.image || "https://i.pravatar.cc/200"
+                        }
+                        className="w-32 h-32 mx-auto rounded-full object-cover border"
+                    />
 
-                    <h2 className="mb-6 text-2xl font-bold text-[#1E293B]">
-                        Profile Preview
+                    <h2 className="mt-4 text-xl font-bold">
+                        {form.fullName || "Lawyer Name"}
                     </h2>
 
-                    <div className="text-center">
+                    <p className="text-gray-600">
+                        Status: {form.availability}
+                    </p>
 
-                        <img
-                            src="https://i.pravatar.cc/200"
-                            alt=""
-                            className="mx-auto h-32 w-32 rounded-full object-cover"
-                        />
+                    <p className="text-amber-700 font-medium">
+                        {form.specialization}
+                    </p>
 
-                        <h3 className="mt-4 text-2xl font-bold">
-                            Banabir Barua
-                        </h3>
-
-                        <p className="text-[#C9A65B]">
-                            Corporate Lawyer
-                        </p>
-
-                        <p className="mt-3 text-gray-500">
-                            Consultation Fee: ৳500
-                        </p>
-
-                        <span className="mt-4 inline-block rounded-full bg-green-100 px-4 py-1 text-green-700">
-                            Available
-                        </span>
-
-                    </div>
-
-                    <div className="mt-8 rounded-2xl bg-slate-50 p-4">
-
-                        <h4 className="font-semibold text-[#1E293B]">
-                            Publication Status
-                        </h4>
-
-                        <p className="mt-2 text-green-600">
-                            ● Published
-                        </p>
-
-                    </div>
-
+                    <p className="text-gray-700 mt-2">
+                        ৳ {form.fee || 0}
+                    </p>
                 </div>
 
             </div>
-
         </div>
     );
 }

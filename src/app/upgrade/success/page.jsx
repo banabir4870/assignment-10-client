@@ -1,3 +1,4 @@
+import { subscription } from '@/lib/action/payment'
 import { stripe } from '@/lib/stripe'
 import { redirect } from 'next/navigation'
 
@@ -21,7 +22,8 @@ export default async function Success({ searchParams }) {
     }
 
     if (status === 'complete') {
-        console.log('Payment successful for session:', metadata)
+        console.log("Metadata Now:", metadata);
+        await subscription({...metadata, sessionId: session_id})
         return (
             <section id="success" className="flex items-center justify-center py-16 px-4">
                 <div className="max-w-lg w-full bg-white shadow-lg rounded-2xl p-8 border border-gray-100 text-center">
