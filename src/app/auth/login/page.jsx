@@ -17,23 +17,20 @@ import { authClient } from "@/lib/auth-client";
 export default function LoginPage() {
     const onSubmit = async (e) => {
         e.preventDefault();
+        const formData = new FormData(e.currentTarget)
+        const userData = Object.fromEntries(formData.entries())
 
-        const formData = new FormData(e.currentTarget);
-        const data = Object.fromEntries(formData.entries());
-
-        console.log("Form Data:", data);
-
-        const {data: signInData, error} = await authClient.signIn.email({
-            email: data.email,
-            password: data.password,
-            callbackUrl: "/",
+        const { data, error } = await authClient.signIn.email({
+            email: userData.email,
+            password: userData.password,
+            callbackURL: '/'
         })
 
-        if(signInData) {
-            alert("Login successful!");
+        if (data) {
+            alert('LogIn Successfully.')
         }
-        if(error) {
-            alert("Login failed: " + error);
+        if (error) {
+            alert(`${error.message}`)
         }
     };
 

@@ -3,19 +3,17 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 
 import { Bars, Xmark, Magnifier, ChevronDown } from "@gravity-ui/icons";
+import { authClient } from "@/lib/auth-client";
 
 export default function Navbar() {
+  const userData = authClient.useSession()
+  const user = userData.data?.user;
+  console.log("User Data:", user);
   const pathname = usePathname();
-
   const [open, setOpen] = useState(false);
-  const [dashboardOpen, setDashboardOpen] = useState(false);
-
-  // Demo
-  const isLoggedIn = false;
-  const role = "client";
 
   const navLinks = [
     {
@@ -26,7 +24,16 @@ export default function Navbar() {
       title: "Browse Lawyers",
       href: "/lawyers",
     },
+    {
+      title: "Dashboard",
+      href: `/dashboard/${user?.role}`,
+    }
   ];
+
+  const handleLogout = async () => {
+    await authClient.signOut();
+    redirect("/auth/login");
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-zinc-200 bg-[#1E293B] backdrop-blur-lg">
@@ -57,11 +64,10 @@ export default function Navbar() {
               href={item.href}
               className={`relative font-medium transition
 
-              ${
-                pathname === item.href
+              ${pathname === item.href
                   ? "text-[#C9A65B] font-semibold"
                   : "text-white hover:text-[#C9A65B]"
-              }`}
+                }`}
             >
               {item.title}
 
@@ -70,52 +76,6 @@ export default function Navbar() {
               )}
             </Link>
           ))}
-
-          {/* Dashboard */}
-
-          <div className="relative">
-
-            <button
-              onClick={() => setDashboardOpen(!dashboardOpen)}
-              className="flex items-center gap-1 font-medium text-white transition hover:text-[#C9A65B]"
-            >
-              Dashboard
-
-              <ChevronDown className="h-4 w-4" />
-            </button>
-
-            {dashboardOpen && (
-              <div className="absolute right-0 mt-4 w-56 rounded-xl border bg-white p-2 shadow-xl">
-
-                {role === "client" && (
-                  <>
-                    <Link
-                      href="/dashboard/profile"
-                      className="block rounded-lg px-4 py-2 hover:bg-zinc-100"
-                    >
-                      My Profile
-                    </Link>
-
-                    <Link
-                      href="/dashboard/bookings"
-                      className="block rounded-lg px-4 py-2 hover:bg-zinc-100"
-                    >
-                      Appointments
-                    </Link>
-
-                    <Link
-                      href="/dashboard/bookmarks"
-                      className="block rounded-lg px-4 py-2 hover:bg-zinc-100"
-                    >
-                      Bookmarks
-                    </Link>
-                  </>
-                )}
-
-              </div>
-            )}
-
-          </div>
 
         </nav>
 
@@ -134,8 +94,8 @@ export default function Navbar() {
 
           </div>
 
-          {isLoggedIn ? (
-            <button className="rounded-full bg-[#C9A65B] px-6 py-2 text-white transition hover:bg-[#ab8635]">
+          {user ? (
+            <button onClick={handleLogout} className="rounded-full bg-[#C9A65B] px-6 py-2 text-white transition hover:bg-red-600">
               Logout
             </button>
           ) : (
@@ -183,11 +143,10 @@ export default function Navbar() {
                 href={item.href}
                 className={`block rounded-lg px-2 py-2
 
-                ${
-                  pathname === item.href
+                ${pathname === item.href
                     ? "bg-[#C9A65B]/10 text-[#C9A65B]"
                     : ""
-                }`}
+                  }`}
                 onClick={() => setOpen(false)}
               >
                 {item.title}
@@ -201,8 +160,8 @@ export default function Navbar() {
               Dashboard
             </Link>
 
-            {isLoggedIn ? (
-              <button className="w-full rounded-full bg-[#C9A65B] py-3 text-white">
+            {user ? (
+              <button onClick={handleLogout} className="w-full rounded-full bg-[#C9A65B] py-3 text-white transition hover:bg-red-600">
                 Logout
               </button>
             ) : (

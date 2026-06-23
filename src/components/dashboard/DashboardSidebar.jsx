@@ -59,7 +59,7 @@ export default async function DashboardSidebar() {
                 {navItems.map((item) => (
                   <button
                     key={item.label}
-                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white transition-colors hover:bg-default hover:text-black"
+                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm w-full text-white transition-colors hover:bg-default hover:text-black"
                     type="button"
                   >
                     <item.icon className="size-5 text-muted" />
