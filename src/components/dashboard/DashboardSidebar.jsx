@@ -5,6 +5,7 @@ import { authClient } from "@/lib/auth-client";
 import {Bars, Bell, Envelope, Gear, House, Magnifier, Person} from "@gravity-ui/icons";
 import {Button, Drawer} from "@heroui/react";
 import { headers } from "next/headers";
+import Link from "next/link";
 import { BiComment, BiHistory } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
 import { FaUserSecret } from "react-icons/fa";
@@ -57,14 +58,15 @@ export default async function DashboardSidebar() {
       </Button>
       <nav className="flex flex-col gap-1 w-52 border-r pt-5 md:block hidden">
                 {navItems.map((item) => (
-                  <button
+                  <Link
+                    href={item.link}
                     key={item.label}
                     className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm w-full text-white transition-colors hover:bg-default hover:text-black"
                     type="button"
                   >
                     <item.icon className="size-5 text-muted" />
                     {item.label}
-                  </button>
+                  </Link>
                 ))}
               </nav>
       <Drawer.Backdrop>

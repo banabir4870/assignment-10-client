@@ -8,9 +8,7 @@ export default function DashboardLayout({ children }) {
                 <DashboardSidebar />
                 <div className="flex flex-1 flex-col overflow-y-auto">
                     {/* navbar */}
-                    <div className="border border-red-400">
-                        Navbar
-                    </div>
+                    
                     <main className="p-5">{children}</main>
                 </div>
             </div>

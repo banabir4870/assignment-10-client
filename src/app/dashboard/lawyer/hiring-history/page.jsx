@@ -1,0 +1,193 @@
+import Link from "next/link";
+
+const requests = [
+    {
+        id: 1,
+        client: "John Doe",
+        date: "22 Jun 2026",
+        fee: "৳500",
+        status: "pending",
+    },
+    {
+        id: 2,
+        client: "Alex Smith",
+        date: "20 Jun 2026",
+        fee: "৳800",
+        status: "accepted",
+    },
+    {
+        id: 3,
+        client: "Sarah Lee",
+        date: "18 Jun 2026",
+        fee: "৳600",
+        status: "rejected",
+    },
+];
+
+export default function HiringHistoryPage() {
+    return (
+        <div className="space-y-8">
+
+            <div className="rounded-3xl bg-[#1E293B] p-8 text-white">
+                <h1 className="text-4xl font-bold">
+                    Hiring Requests
+                </h1>
+
+                <p className="mt-2 text-gray-300">
+                    Manage client hiring requests.
+                </p>
+            </div>
+
+            {/* Stats */}
+
+            <div className="grid gap-5 md:grid-cols-3">
+
+                <div className="rounded-2xl bg-white p-6 shadow">
+                    <p className="text-gray-500">Pending</p>
+                    <h2 className="mt-2 text-4xl font-bold text-yellow-500">
+                        5
+                    </h2>
+                </div>
+
+                <div className="rounded-2xl bg-white p-6 shadow">
+                    <p className="text-gray-500">Accepted</p>
+                    <h2 className="mt-2 text-4xl font-bold text-green-600">
+                        18
+                    </h2>
+                </div>
+
+                <div className="rounded-2xl bg-white p-6 shadow">
+                    <p className="text-gray-500">Rejected</p>
+                    <h2 className="mt-2 text-4xl font-bold text-red-500">
+                        3
+                    </h2>
+                </div>
+
+            </div>
+
+            {/* Table */}
+
+            <div className="rounded-3xl bg-white p-8 shadow">
+
+                <div className="mb-6 flex flex-col gap-4 md:flex-row md:justify-between">
+
+                    <h2 className="text-2xl font-bold text-[#1E293B]">
+                        Recent Requests
+                    </h2>
+
+                    <input
+                        placeholder="Search client..."
+                        className="rounded-xl border px-4 py-2 text-[#1E293B] outline-none focus:border-[#C9A65B]"
+                    />
+
+                </div>
+
+                <div className="overflow-x-auto">
+
+                    <table className="w-full">
+
+                        <thead>
+
+                            <tr className="border-b">
+
+                                <th className="py-4 text-left text-[#1E293B]">
+                                    Client
+                                </th>
+
+                                <th className="py-4 text-left text-[#1E293B]">
+                                    Date
+                                </th>
+
+                                <th className="py-4 text-left text-[#1E293B]">
+                                    Fee
+                                </th>
+
+                                <th className="py-4 text-left text-[#1E293B]">
+                                    Status
+                                </th>
+
+                                <th className="py-4 text-left text-[#1E293B]">
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {requests.map((request) => (
+                                <tr
+                                    key={request.id}
+                                    className="border-b"
+                                >
+                                    <td className="py-5 text-[#1E293B]">
+                                        {request.client}
+                                    </td>
+
+                                    <td className="text-[#1E293B]">
+                                        {request.date}
+                                    </td>
+
+                                    <td className="text-[#1E293B]">
+                                        {request.fee}
+                                    </td>
+
+                                    <td>
+
+                                        {request.status === "pending" && (
+                                            <span className="rounded-full bg-yellow-100 px-3 py-1 text-sm text-yellow-700">
+                                                Pending
+                                            </span>
+                                        )}
+
+                                        {request.status === "accepted" && (
+                                            <span className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700">
+                                                Accepted
+                                            </span>
+                                        )}
+
+                                        {request.status === "rejected" && (
+                                            <span className="rounded-full bg-red-100 px-3 py-1 text-sm text-red-700">
+                                                Rejected
+                                            </span>
+                                        )}
+
+                                    </td>
+
+                                    <td>
+
+                                        {request.status === "pending" ? (
+                                            <div className="flex gap-2">
+
+                                                <button className="rounded-lg bg-green-600 px-4 py-2 text-white">
+                                                    Accept
+                                                </button>
+
+                                                <button className="rounded-lg bg-red-500 px-4 py-2 text-white">
+                                                    Reject
+                                                </button>
+
+                                            </div>
+                                        ) : (
+                                            <span className="text-gray-400">
+                                                Completed
+                                            </span>
+                                        )}
+
+                                    </td>
+
+                                </tr>
+                            ))}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+    );
+}
