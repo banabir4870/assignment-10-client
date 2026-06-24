@@ -131,7 +131,7 @@ export default function ManageLegalProfilePage() {
     // UI
     // -------------------------
     return (
-        <div className="p-6 space-y-6 bg-gray-100 min-h-screen text-gray-900">
+        <div className="p-6 space-y-6 bg-gray-100 min-h-screen text-gray-900 rounded-2xl">
 
             {/* HEADER */}
             <div className="bg-slate-900 text-white p-6 rounded-2xl">

@@ -6,8 +6,23 @@ import {
     Clock3,
     UserRound
 } from "lucide-react";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import Image from "next/image";
 
-export default function LawyerDashboard() {
+export default async function LawyerDashboard() {
+
+    const session = await auth.api.getSession({
+        headers: await headers()
+    })
+
+    const userId = session?.user?.id;
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/lawyer/profile/${userId}`);
+    const data = await res.json();
+    const lawyerProfile = data.profile;
+    console.log("lawyerProfile", lawyerProfile);
+    const { fullName, specialization, fee, bio, availability, image, totalHires } = lawyerProfile;
 
     return (
         <div className="space-y-8">
@@ -26,7 +41,7 @@ export default function LawyerDashboard() {
 
                         <h1 className="mt-2 text-4xl font-bold">
 
-                            Banabir Barua 👋
+                            {fullName} 👋
 
                         </h1>
 
@@ -68,7 +83,7 @@ export default function LawyerDashboard() {
 
                     <p className="mt-2 text-black text-4xl font-bold">
 
-                        24
+                        {totalHires}
 
                     </p>
 
@@ -86,7 +101,7 @@ export default function LawyerDashboard() {
 
                     <p className="mt-2 text-4xl text-black font-bold">
 
-                        ৳12,500
+                        ${totalHires * fee}
 
                     </p>
 
@@ -153,8 +168,11 @@ export default function LawyerDashboard() {
 
                 <div className="mt-8 flex flex-col gap-6 md:flex-row">
 
-                    <img
-                        src="https://i.pravatar.cc/150"
+                    <Image
+                        src={image}
+                        alt={fullName}
+                        width={128}
+                        height={128}
                         className="h-32 w-32 rounded-2xl object-cover"
                     />
 
@@ -162,13 +180,13 @@ export default function LawyerDashboard() {
 
                         <h3 className="text-3xl font-bold">
 
-                            Banabir Barua
+                            {fullName}
 
                         </h3>
 
                         <p className="mt-2 text-gray-500">
 
-                            Corporate Lawyer
+                            {specialization}
 
                         </p>
 
@@ -189,7 +207,7 @@ export default function LawyerDashboard() {
 
                             <span className="rounded-full bg-[#C9A65B]/10 px-4 py-1 text-[#C9A65B]">
 
-                                ৳500 / Consultation
+                                ${fee} / Consultation
 
                             </span>
 
