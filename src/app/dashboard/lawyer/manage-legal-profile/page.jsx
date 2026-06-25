@@ -32,7 +32,7 @@ export default function ManageLegalProfilePage() {
         try {
             setLoading(true);
 
-            const res = await fetch(`${SERVER_URL}/lawyer/profile/${id}`);
+            const res = await fetch(`${SERVER_URL}/lawyer/profile/user/${id}`);
             const data = await res.json();
 
             if (data.exists) {
@@ -164,7 +164,7 @@ export default function ManageLegalProfilePage() {
                         name="fullName"
                         value={form.fullName}
                         onChange={handleChange}
-                        placeholder="Lawyer Name"
+                        placeholder={session?.user?.name}
                         className="border p-3 w-full rounded text-gray-900 placeholder-gray-500"
                     />
 
@@ -178,6 +178,16 @@ export default function ManageLegalProfilePage() {
                         <option>Family Law</option>
                         <option>Criminal Law</option>
                         <option>Property Law</option>
+                        <option>Immigration Law</option>
+                        <option>Tax Law</option>
+                        <option>Employment Law</option>
+                        <option>Civil Litigation Law</option>
+                        <option>Environmental Law</option>
+                        <option>Cyber Law</option>
+                        <option>Personal Injury Law</option>
+                        <option>Bankruptcy Law</option>
+                        <option>Constitutional Law</option>
+                        <option>Business & Commercial Law</option>
                     </select>
 
                     <input

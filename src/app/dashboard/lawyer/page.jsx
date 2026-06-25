@@ -18,8 +18,28 @@ export default async function LawyerDashboard() {
 
     const userId = session?.user?.id;
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/lawyer/profile/${userId}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/lawyer/profile/user/${userId}`);
     const data = await res.json();
+    if (!data.exists) {
+        return (
+            <div className="rounded-3xl bg-white p-10 text-center shadow">
+                <h2 className="text-3xl font-bold text-[#1E293B]">
+                    Complete Your Lawyer Profile
+                </h2>
+
+                <p className="mt-3 text-gray-500">
+                    Before using the lawyer dashboard, please complete your legal profile.
+                </p>
+
+                <Link
+                    href="/dashboard/lawyer/manage-legal-profile"
+                    className="mt-6 inline-block rounded-xl bg-[#C9A65B] px-6 py-3 text-white hover:bg-[#ab8635]"
+                >
+                    Create Profile
+                </Link>
+            </div>
+        );
+    }
     const lawyerProfile = data.profile;
     console.log("lawyerProfile", lawyerProfile);
     const { fullName, specialization, fee, bio, availability, image, totalHires } = lawyerProfile;
@@ -166,19 +186,19 @@ export default async function LawyerDashboard() {
 
                 </div>
 
-                <div className="mt-8 flex flex-col gap-6 md:flex-row">
+                <div className="mt-8 flex flex-col items-center gap-6 md:flex-row">
 
                     <Image
                         src={image}
                         alt={fullName}
                         width={128}
                         height={128}
-                        className="h-32 w-32 rounded-2xl object-cover"
+                        className="h-40 w-40 rounded-2xl object-cover"
                     />
 
                     <div>
 
-                        <h3 className="text-3xl font-bold">
+                        <h3 className="text-3xl font-bold text-[#1E293B]">
 
                             {fullName}
 
@@ -187,13 +207,6 @@ export default async function LawyerDashboard() {
                         <p className="mt-2 text-gray-500">
 
                             {specialization}
-
-                        </p>
-
-                        <p className="mt-3 max-w-xl text-gray-600">
-
-                            Helping businesses and startups with contracts,
-                            compliance and legal consultation.
 
                         </p>
 
