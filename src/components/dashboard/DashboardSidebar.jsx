@@ -33,6 +33,7 @@ export default async function DashboardSidebar() {
         admin: [
             {icon: House, label: "Home", link: "/dashboard/admin"},
             {icon: RiUser2Fill, label: "Manage Users", link: "/dashboard/admin/manage-users"},
+            {icon: FaUserSecret, label: "Manage Lawyers", link: "/dashboard/admin/manage-lawyers"},
             {icon: GrTransaction, label: "All Transactions", link: "/dashboard/admin/all-transactions"},
             {icon: GrAnalytics, label: "Analytics", link: "/dashboard/admin/analytics"},
         ],

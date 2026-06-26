@@ -37,7 +37,7 @@ export default function UserHiringHistory() {
         };
 
         fetchHistory();
-    }, [session]);
+    }, [session?.user?.id]);
 
     const filtered = useMemo(() => {
         return hirings.filter((item) =>
@@ -60,30 +60,32 @@ export default function UserHiringHistory() {
     ).length;
 
     const handlePayment = async (hire) => {
-    //     try {
-    //         const res = await fetch(
-    //             `${process.env.NEXT_PUBLIC_SERVER_URL}/create-checkout-session`,
-    //             {
-    //                 method: "POST",
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                 },
-    //                 body: JSON.stringify({
-    //                     hireId: hire._id,
-    //                 }),
-    //             }
-    //         );
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/create-checkout-session`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        hireId: hire._id,
+                        success_url: `${window.location.origin}/dashboard/user/payment/success?hireId=${hire._id}&session_id={CHECKOUT_SESSION_ID}`,
+                        cancel_url: `${window.location.origin}/dashboard/user/payment/cancel`,
+                    }),
+                }
+            );
 
-    //         const data = await res.json();
+            const data = await res.json();
 
-    //         if (data.url) {
-    //             window.location.href = data.url;
-    //         } else {
-    //             alert(data.message || "Unable to start payment.");
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                alert(data.message || "Unable to start payment.");
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     if (loading) {
@@ -282,6 +284,12 @@ export default function UserHiringHistory() {
                                                 </span>
                                             )}
 
+                                            {item.status === "completed" && (
+                                                <span className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700">
+                                                    Completed
+                                                </span>
+                                            )}
+
                                         </td>
 
                                         <td>
@@ -331,7 +339,7 @@ export default function UserHiringHistory() {
                                                     </Button>
                                                 )}
 
-                                            {item.status === "accepted" &&
+                                            {item.status === "completed" &&
                                                 item.paymentStatus ===
                                                     "paid" && (
                                                     <span className="font-semibold text-green-600">
