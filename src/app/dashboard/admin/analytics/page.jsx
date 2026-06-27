@@ -257,31 +257,6 @@ export default function AdminAnalytics() {
 
                 </Card>
 
-                <Card>
-
-                    <div className="flex flex-row items-center gap-4">
-
-                        <Star
-                            size={36}
-                            className="text-warning"
-                        />
-
-                        <div>
-
-                            <p className="text-default-500 text-sm">
-                                Average Rating
-                            </p>
-
-                            <h2 className="text-2xl font-bold">
-                                {stats.averageRating}
-                            </h2>
-
-                        </div>
-
-                    </div>
-
-                </Card>
-
             </div>
 
             {/* Charts Section Starts Here */}
@@ -412,11 +387,10 @@ export default function AdminAnalytics() {
                                 className="hover:scale-[1.02] transition-transform"
                             >
 
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-4 p-4">
 
-                                    <Avatar size='sm'>
-                                        <Avatar.Image referrerPolicy="no-referrer" alt={lawyer.name} src={lawyer.image} />
-                                        {/* <Avatar.Fallback>{lawyer.name[0]}</Avatar.Fallback> */}
+                                    <Avatar size='lg'>
+                                        <Avatar.Image referrerPolicy="no-referrer" alt={lawyer.fullName} src={lawyer.image} />
                                     </Avatar>
 
                                     <div className="flex flex-col">
@@ -427,11 +401,15 @@ export default function AdminAnalytics() {
 
 
                                         <p className="text-sm text-default-500 text-black">
-                                            {lawyer.specialization || lawyer.category}
+                                            {lawyer.specialization}
                                         </p>
 
                                         <p className="text-xs text-default-400 mt-1">
-                                            ⭐ Rating: {lawyer.rating ?? 0}
+                                            ⭐ Rating: {lawyer.rating}
+                                        </p>
+                                        
+                                        <p className="text-xs text-default-400 mt-1">
+                                            💼 Total Hires: {lawyer.totalHires}
                                         </p>
 
                                     </div>

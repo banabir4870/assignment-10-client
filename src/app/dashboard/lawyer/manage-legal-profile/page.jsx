@@ -1,6 +1,7 @@
 "use client";
 
 import { useSession } from "@/lib/auth-client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function ManageLegalProfilePage() {
@@ -236,12 +237,15 @@ export default function ManageLegalProfilePage() {
                 {/* PREVIEW */}
                 <div className="bg-white p-6 rounded-xl shadow text-center border text-gray-900">
 
-                    <img
+                    <Image
                         src={
                             imageFile
                                 ? URL.createObjectURL(imageFile)
                                 : form.image || "https://i.pravatar.cc/200"
                         }
+                        alt=" "
+                        width={800}
+                        height={800}
                         className="w-32 h-32 mx-auto rounded-full object-cover border"
                     />
 

@@ -44,6 +44,7 @@ export default function ManageUsers() {
             );
 
             const data = await res.json();
+            console.log("user data:", data)
 
             if (data.success) {
                 setUsers(data.users);
@@ -249,10 +250,10 @@ export default function ManageUsers() {
 
                                             <div className="flex items-center gap-3">
 
-                                                <Avatar
-                                                    src={user.image}
-                                                    name={user.name}
-                                                />
+                                                <Avatar size='lg'>
+                                                    <Avatar.Image referrerPolicy="no-referrer" alt={user.name || "User"} src={user.image} />
+                                                    <Avatar.Fallback>{user.name ? user.name[0] : "U"}</Avatar.Fallback>
+                                                </Avatar>
 
                                                 <div>
 

@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import {
     BriefcaseBusiness,
@@ -10,6 +14,49 @@ import {
 } from "lucide-react";
 
 export default function UserHomePage() {
+    const { data: session } = useSession();
+
+    const [hirings, setHirings] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (!session?.user?.id) return;
+
+        const fetchHirings = async () => {
+            try {
+                const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_SERVER_URL}/hirings/user/${session.user.id}`
+                );
+
+                const data = await res.json();
+
+                if (data.success) {
+                    setHirings(data.hirings);
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchHirings();
+    }, [session]);
+
+    const totalRequests = hirings.length;
+
+    const pending = hirings.filter(
+        (item) => item.status === "pending"
+    ).length;
+
+    const accepted = hirings.filter(
+        (item) => item.status === "accepted"
+    ).length;
+
+    const completed = hirings.filter(
+        (item) => item.status === "completed"
+    ).length;
+
     return (
         <div className="space-y-8">
 
@@ -43,7 +90,7 @@ export default function UserHomePage() {
                             </p>
 
                             <h2 className="mt-2 text-4xl font-bold text-slate-800">
-                                12
+                                {loading ? "..." : totalRequests}
                             </h2>
 
                         </div>
@@ -67,7 +114,7 @@ export default function UserHomePage() {
                             </p>
 
                             <h2 className="mt-2 text-4xl font-bold text-yellow-500">
-                                3
+                                {loading ? "..." : pending}
                             </h2>
 
                         </div>
@@ -91,7 +138,7 @@ export default function UserHomePage() {
                             </p>
 
                             <h2 className="mt-2 text-4xl font-bold text-green-600">
-                                5
+                                {loading ? "..." : accepted}
                             </h2>
 
                         </div>
@@ -115,7 +162,7 @@ export default function UserHomePage() {
                             </p>
 
                             <h2 className="mt-2 text-4xl font-bold text-indigo-600">
-                                4
+                                {loading ? "..." : completed}
                             </h2>
 
                         </div>
@@ -132,16 +179,13 @@ export default function UserHomePage() {
 
             {/* Quick Actions */}
 
-            {/* Quick Actions */}
-
             <div className="grid gap-6 lg:grid-cols-3">
-
-                {/* Browse Lawyers */}
 
                 <Link
                     href="/lawyers"
                     className="rounded-3xl border bg-white p-8 transition hover:-translate-y-1 hover:shadow-lg"
                 >
+
                     <Search
                         className="mb-5 text-black"
                         size={40}
@@ -158,12 +202,11 @@ export default function UserHomePage() {
 
                 </Link>
 
-                {/* Hiring History */}
-
                 <Link
                     href="/dashboard/user/hiring-history"
                     className="rounded-3xl border bg-white p-8 transition hover:-translate-y-1 hover:shadow-lg"
                 >
+
                     <BriefcaseBusiness
                         className="mb-5 text-black"
                         size={40}
@@ -180,12 +223,11 @@ export default function UserHomePage() {
 
                 </Link>
 
-                {/* Update Profile */}
-
                 <Link
                     href="/dashboard/user/update-profile"
                     className="rounded-3xl border bg-white p-8 transition hover:-translate-y-1 hover:shadow-lg"
                 >
+
                     <FileText
                         className="mb-5 text-black"
                         size={40}

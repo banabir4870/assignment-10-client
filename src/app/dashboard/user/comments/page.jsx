@@ -89,13 +89,13 @@ export default function UserCommentsPage() {
         <div className="space-y-8">
             <div className="rounded-3xl bg-[#1E293B] p-8 text-white">
                 <h1 className="text-4xl font-bold">My Reviews</h1>
-                <p className="mt-2 text-gray-300">Manage reviews you've left for lawyers.</p>
+                <p className="mt-2 text-gray-300">Manage reviews you&apos;ve left for lawyers.</p>
             </div>
 
             {comments.length === 0 ? (
                 <div className="py-20 text-center bg-white rounded-3xl shadow">
                     <h2 className="text-3xl font-bold text-black">No Reviews Yet</h2>
-                    <p className="mt-3 text-gray-500">You haven't reviewed any lawyers yet.</p>
+                    <p className="mt-3 text-gray-500">You haven&apos;t reviewed any lawyers yet.</p>
                 </div>
             ) : (
                 <div className="grid gap-6 md:grid-cols-2">
@@ -116,11 +116,10 @@ export default function UserCommentsPage() {
                             </div>
                             <p className="text-gray-600 mb-6">{comment.comment}</p>
                             
-                            <div className="flex justify-end gap-3 mt-auto pt-4 border-t">
+                            <div className="flex justify-end gap-3 mt-auto pt-4 border-t text-black">
                                 <Button
                                     size="sm"
-                                    color="primary"
-                                    variant="flat"
+                                    variant="primary"
                                     onClick={() => {
                                         setEditingComment(comment);
                                         setEditRating(comment.rating);
@@ -132,8 +131,7 @@ export default function UserCommentsPage() {
                                 </Button>
                                 <Button
                                     size="sm"
-                                    color="danger"
-                                    variant="flat"
+                                    variant="danger"
                                     onClick={() => handleDelete(comment._id)}
                                     className="flex items-center gap-1"
                                 >

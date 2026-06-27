@@ -53,8 +53,8 @@ export default function AdminHomePage() {
                 </div>
                 <h1 className="text-4xl font-bold">Welcome, Admin 👋</h1>
                 <p className="mt-3 max-w-2xl text-lg opacity-80">
-                    Oversee the entire LegalEase platform — manage users, review
-                    transactions, and monitor analytics all from one place.
+                    Monitor your platform, manage users, track lawyer subscriptions,
+                    review hiring activity, and analyze LegalEase performance from one place.
                 </p>
             </div>
 
@@ -89,7 +89,6 @@ export default function AdminHomePage() {
                                 icon={<Briefcase size={22} />}
                                 label="Total Lawyers"
                                 value={stats.totalLawyers || 0}
-                                sub={`${stats.publishedLawyers || 0} published`}
                                 iconBg="bg-purple-500"
                                 textColor="text-purple-400"
                             />
@@ -149,13 +148,6 @@ export default function AdminHomePage() {
                             iconBg="bg-orange-500"
                             textColor="text-orange-400"
                         />
-                        <StatCard
-                            icon={<Star size={22} />}
-                            label="Avg Lawyer Rating"
-                            value={`${stats.averageRating || 0} / 5`}
-                            iconBg="bg-yellow-500"
-                            textColor="text-yellow-400"
-                        />
                     </div>
                 </>
             ) : (
@@ -177,8 +169,8 @@ export default function AdminHomePage() {
                     <QuickLink
                         href="/dashboard/admin/all-transactions"
                         icon={<CreditCard size={40} />}
-                        title="All Transactions"
-                        description="Browse all completed payment records from client hirings. Search by client or lawyer name and paginate results."
+                        title="Subscription Transactions"
+                        description="View all successful lawyer subscription payments. Search by lawyer name or email and monitor LegalEase revenue."
                     />
                     <QuickLink
                         href="/dashboard/admin/analytics"
@@ -197,10 +189,12 @@ export default function AdminHomePage() {
                 </div>
                 <p className="mt-5 leading-8 text-gray-300">
                     Admin accounts are fully protected — you cannot modify or delete other
-                    admins from the panel. When changing a user&apos;s role to{" "}
-                    <span className="text-primary font-semibold">lawyer</span>, their
-                    profile will not be created automatically. The user must log in and
-                    complete their lawyer profile through the Manage Legal Profile page.
+                    admins from the panel. When changing a users role to
+                    <span className="text-primary font-semibold"> lawyer </span>
+                    the user must purchase the
+                    <span className="text-primary font-semibold"> $15 Lawyer Pro Plan </span>
+                    before enjoying premium lawyer benefits. Client hiring payments belong to
+                    the lawyer, while LegalEase revenue comes only from subscription payments.
                 </p>
             </div>
         </div>
