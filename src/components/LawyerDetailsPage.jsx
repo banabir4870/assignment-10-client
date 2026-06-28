@@ -84,6 +84,11 @@ export default function LawyerDetailsPage({ id }) {
             return;
         }
 
+        if (session.user.role === "admin") {
+            alert("Admins cannot hire any lawyers")
+            return
+        }
+
         if (session.user.id === lawyer.userId) {
             alert("You cannot hire yourself");
             return;
@@ -157,6 +162,7 @@ export default function LawyerDetailsPage({ id }) {
 
     const isLawyer = session?.user?.role === "lawyer";
     const isOwnProfile = session?.user?.id === lawyer.userId;
+    const isAdmin = session?.user?.role === "admin";
 
     return (
         <section className="max-w-7xl mx-auto px-4 py-12">
@@ -186,8 +192,8 @@ export default function LawyerDetailsPage({ id }) {
                     <div className="mt-6">
                         <span
                             className={`px-4 py-2 rounded-full text-white ${lawyer.availability === "Available"
-                                    ? "bg-green-600"
-                                    : "bg-red-500"
+                                ? "bg-green-600"
+                                : "bg-red-500"
                                 }`}
                         >
                             {lawyer.availability}
@@ -250,11 +256,6 @@ export default function LawyerDetailsPage({ id }) {
 
                     <Button
                         onClick={handleHire}
-                        disabled={
-                            hireLoading ||
-                            isLawyer ||
-                            isOwnProfile
-                        }
                         className="w-full mt-10 bg-primary text-black py-6 rounded-2xl font-semibold"
                     >
                         {hireLoading
@@ -263,7 +264,9 @@ export default function LawyerDetailsPage({ id }) {
                                 ? "This Is Your Profile"
                                 : isLawyer
                                     ? "Lawyers Cannot Hire"
-                                    : "Hire This Lawyer"}
+                                    : isAdmin
+                                        ? "Admins Cannot Hire"
+                                        : "Hire This Lawyer"}
                     </Button>
 
                 </div>

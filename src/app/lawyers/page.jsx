@@ -10,8 +10,10 @@ import {
     Users,
 } from "lucide-react";
 import { Button } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
 
 const BrowseLawyersPage = () => {
+
     const [lawyers, setLawyers] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -26,11 +28,16 @@ const BrowseLawyersPage = () => {
 
     useEffect(() => {
         const fetchLawyers = async () => {
+            const { data: tokenData } = await authClient.token()
             try {
                 const res = await fetch(
                     `${process.env.NEXT_PUBLIC_SERVER_URL}/lawyer/profile`,
                     {
                         cache: "no-store",
+                        headers: {
+                            'content-type': 'application/json',
+                            authorization: `Bearer ${tokenData?.token}`
+                        }
                     }
                 );
 
@@ -257,12 +264,11 @@ const BrowseLawyersPage = () => {
                                         />
 
                                         <span
-                                            className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-semibold text-white ${
-                                                lawyer.availability ===
-                                                "Available"
+                                            className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-semibold text-white ${lawyer.availability ===
+                                                    "Available"
                                                     ? "bg-green-600"
                                                     : "bg-red-500"
-                                            }`}
+                                                }`}
                                         >
                                             {lawyer.availability}
                                         </span>
@@ -360,11 +366,10 @@ const BrowseLawyersPage = () => {
                                     onClick={() =>
                                         setCurrentPage(index + 1)
                                     }
-                                    className={`px-4 py-2 rounded-lg border transition ${
-                                        currentPage === index + 1
+                                    className={`px-4 py-2 rounded-lg border transition ${currentPage === index + 1
                                             ? "bg-primary text-white"
                                             : ""
-                                    }`}
+                                        }`}
                                 >
                                     {index + 1}
                                 </button>

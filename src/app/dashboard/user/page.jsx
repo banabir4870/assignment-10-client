@@ -62,10 +62,10 @@ export default function UserHomePage() {
 
             {/* Welcome Banner */}
 
-            <div className="rounded-3xl bg-linear-to-r from-primary to-amber-400 p-8 text-black">
+            <div className="rounded-3xl bg-linear-to-r  from-amber-400 to-primary p-8 text-black">
 
                 <h1 className="text-4xl font-bold">
-                    Welcome Back 👋
+                    Welcome Back, {session?.user?.name} 👋
                 </h1>
 
                 <p className="mt-3 max-w-2xl text-lg">
