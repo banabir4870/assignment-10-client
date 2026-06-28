@@ -138,7 +138,7 @@ export default function FeaturedLawyers() {
                                         className="object-cover transition duration-500 hover:scale-110"
                                     />
 
-                                    <div className="absolute left-4 top-4 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white flex items-center gap-1">
+                                    <div className="absolute left-4 top-4 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-blue-500 flex items-center gap-1">
                                         <BadgeCheck size={14} />
                                         Verified
                                     </div>
