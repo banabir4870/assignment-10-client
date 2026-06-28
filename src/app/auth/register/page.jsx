@@ -14,6 +14,7 @@ import { Check } from "@gravity-ui/icons";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
   const onSubmit = async (e) => {
@@ -23,7 +24,7 @@ export default function RegisterPage() {
     const UserData = Object.fromEntries(formData.entries());
 
     if (UserData.password !== UserData.confirmPassword) {
-      alert("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -37,11 +38,11 @@ export default function RegisterPage() {
     })
 
     if(data) {
-        alert("Registration successful!");
+        toast.success("Registration successful!");
         redirect("/");
     }
     if(error) {
-        alert("Registration failed: " + error);
+        toast.error("Registration failed: " + error);
     }
 
     console.log("Form Data:", UserData);

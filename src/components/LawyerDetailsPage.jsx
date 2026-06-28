@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Button } from "@heroui/react";
 import { useSession } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 export default function LawyerDetailsPage({ id }) {
     const { data: session } = useSession();
@@ -75,22 +76,22 @@ export default function LawyerDetailsPage({ id }) {
 
     const handleHire = async () => {
         if (!session?.user) {
-            alert("Please login first");
+            toast.error("Please login first");
             return;
         }
 
         if (session.user.role === "lawyer") {
-            alert("Lawyers cannot hire other lawyers");
+            toast.error("Lawyers cannot hire other lawyers");
             return;
         }
 
         if (session.user.role === "admin") {
-            alert("Admins cannot hire any lawyers")
+            toast.error("Admins cannot hire any lawyers")
             return
         }
 
         if (session.user.id === lawyer.userId) {
-            alert("You cannot hire yourself");
+            toast.error("You cannot hire yourself");
             return;
         }
 
@@ -119,13 +120,13 @@ export default function LawyerDetailsPage({ id }) {
             const data = await res.json();
 
             if (data.success) {
-                alert("Hiring request submitted successfully");
+                toast.success("Hiring request submitted successfully");
             } else {
-                alert(data.message);
+                toast.error(data.message);
             }
         } catch (error) {
             console.log(error);
-            alert("Something went wrong");
+            toast.error("Something went wrong");
         } finally {
             setHireLoading(false);
         }
@@ -300,7 +301,7 @@ export default function LawyerDetailsPage({ id }) {
                         <Button
                             color="primary"
                             onClick={async () => {
-                                if (!newComment.trim()) return alert("Please write a comment.");
+                                if (!newComment.trim()) return toast.error("Please write a comment.");
                                 setCommentLoading(true);
                                 try {
                                     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/comments`, {
@@ -317,18 +318,18 @@ export default function LawyerDetailsPage({ id }) {
                                     });
                                     const data = await res.json();
                                     if (data.success) {
-                                        alert("Review submitted successfully");
+                                        toast.success("Review submitted successfully");
                                         setNewComment("");
                                         // Refetch comments
                                         const commentsRes = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/comments/lawyer/${id}`);
                                         const commentsData = await commentsRes.json();
                                         if (commentsData.success) setComments(commentsData.comments);
                                     } else {
-                                        alert(data.message);
+                                        toast.error(data.message);
                                     }
                                 } catch (err) {
                                     console.log(err);
-                                    alert("Failed to submit review");
+                                    toast.error("Failed to submit review");
                                 } finally {
                                     setCommentLoading(false);
                                 }

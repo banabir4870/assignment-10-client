@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSession } from "@/lib/auth-client";
 import { Button } from "@heroui/react";
+import toast from "react-hot-toast";
 
 export default function UserHiringHistory() {
     const { data: session } = useSession();
@@ -81,7 +82,7 @@ export default function UserHiringHistory() {
             if (data.url) {
                 window.location.href = data.url;
             } else {
-                alert(data.message || "Unable to start payment.");
+                toast.error(data.message || "Unable to start payment.");
             }
         } catch (error) {
             console.log(error);

@@ -5,6 +5,7 @@ import { useSession } from "@/lib/auth-client";
 import { Button } from "@heroui/react";
 import { Star, Edit, Trash2, X } from "lucide-react";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function UserCommentsPage() {
     const { data: session } = useSession();
@@ -43,18 +44,19 @@ export default function UserCommentsPage() {
             });
             const data = await res.json();
             if (data.success) {
+                toast.success('Comment Deleted')
                 setComments((prev) => prev.filter((c) => c._id !== id));
             } else {
-                alert(data.message || "Failed to delete");
+                toast.error(data.message || "Failed to delete");
             }
         } catch (error) {
             console.log(error);
-            alert("An error occurred");
+            toast.error("An error occurred");
         }
     };
 
     const handleSaveEdit = async () => {
-        if (!editContent.trim()) return alert("Review cannot be empty");
+        if (!editContent.trim()) return toast.error("Review cannot be empty");
         setSaveLoading(true);
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/comments/${editingComment._id}`, {
@@ -67,15 +69,15 @@ export default function UserCommentsPage() {
             });
             const data = await res.json();
             if (data.success) {
-                alert("Review updated");
+                toast.success("Review updated");
                 setEditingComment(null);
                 fetchComments();
             } else {
-                alert(data.message || "Failed to update");
+                toast.error(data.message || "Failed to update");
             }
         } catch (error) {
             console.log(error);
-            alert("An error occurred");
+            toast.error("An error occurred");
         } finally {
             setSaveLoading(false);
         }

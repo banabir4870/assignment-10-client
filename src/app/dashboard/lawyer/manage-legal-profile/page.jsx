@@ -3,6 +3,7 @@
 import { useSession } from "@/lib/auth-client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function ManageLegalProfilePage() {
     const { data: session } = useSession();
@@ -119,10 +120,10 @@ export default function ManageLegalProfilePage() {
 
             await fetchProfile(userId);
 
-            alert("Profile saved successfully!");
+            toast.success("Profile saved successfully!");
         } catch (err) {
             console.log(err);
-            alert("Error saving profile");
+            toast.error("Error saving profile");
         } finally {
             setSaving(false);
         }

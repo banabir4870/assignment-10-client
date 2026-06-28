@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useSession } from "@/lib/auth-client";
 import { Button } from "@heroui/react";
+import toast from "react-hot-toast";
 
 export default function UserUpdateProfilePage() {
     const { data: session } = useSession();
@@ -91,12 +92,13 @@ export default function UserUpdateProfilePage() {
                     ...prev,
                     image: data.data.url,
                 }));
+                toast.success("Image Uploaded")
             } else {
-                alert("Image upload failed");
+                toast.error("Image upload failed");
             }
         } catch (error) {
             console.log(error);
-            alert("Image upload failed");
+            toast.error("Image upload failed");
         } finally {
             setUploading(false);
         }
@@ -125,16 +127,16 @@ export default function UserUpdateProfilePage() {
             const data = await res.json();
 
             if (data.success) {
-                alert("Profile updated successfully.");
+                toast.success("Profile updated successfully.");
 
                 // refresh session/avatar
                 window.location.reload();
             } else {
-                alert(data.message);
+                toast.error(data.message);
             }
         } catch (error) {
             console.log(error);
-            alert("Something went wrong");
+            toast.error("Something went wrong");
         } finally {
             setSaving(false);
         }
