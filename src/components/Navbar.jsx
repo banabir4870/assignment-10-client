@@ -179,13 +179,6 @@ export default function Navbar() {
               </Link>
             ))}
 
-            <Link
-              href="/dashboard"
-              className="block rounded-lg px-2 py-2"
-            >
-              Dashboard
-            </Link>
-
             {user ? (
               <button onClick={handleLogout} className="w-full rounded-full bg-[#C9A65B] py-3 text-white transition hover:bg-red-600">
                 Logout

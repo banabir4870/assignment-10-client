@@ -223,6 +223,7 @@ export default function UserHiringHistory() {
                                     <th className="py-4 text-left text-black">
                                         Lawyer
                                     </th>
+                                
 
                                     <th className="py-4 text-left text-black">
                                         Fee
@@ -260,6 +261,7 @@ export default function UserHiringHistory() {
                                         <td className="py-5 font-medium text-black">
                                             {item.lawyerName}
                                         </td>
+
 
                                         <td className="text-black">
                                             ${item.lawyerFee}

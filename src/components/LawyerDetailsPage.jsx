@@ -110,7 +110,6 @@ export default function LawyerDetailsPage({ id }) {
                         lawyerId: lawyer._id,
                         lawyerName: lawyer.fullName,
                         lawyerFee: lawyer.fee,
-
                         userId: session.user.id,
                         userName: session.user.name,
                         userEmail: session.user.email,

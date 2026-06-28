@@ -5,7 +5,6 @@ import {
   RefreshCw,
   ReceiptText,
   Search,
-  CreditCard,
 } from "lucide-react";
 import {
   Button,
@@ -21,15 +20,13 @@ export default function AllTransactions() {
 
   const [page, setPage] = useState(1);
 
-  const [totalPages, setTotalPages] =
-    useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const [totalTransactions,
-    setTotalTransactions] = useState(0);
+  const [totalTransactions, setTotalTransactions] =
+    useState(0);
 
   const fetchTransactions = async () => {
     try {
-
       setLoading(true);
 
       const res = await fetch(
@@ -39,51 +36,34 @@ export default function AllTransactions() {
       const data = await res.json();
 
       if (data.success) {
-
         setTransactions(data.transactions);
-
-        setTotalTransactions(
-          data.totalTransactions
-        );
-
+        setTotalTransactions(data.totalTransactions);
         setTotalPages(data.totalPages);
-
       }
-
     } catch (err) {
-
       console.log(err);
-
-      toast.error(
-        "Failed to load transactions"
-      );
-
+      toast.error("Failed to load transactions");
     } finally {
-
       setLoading(false);
-
     }
   };
 
   useEffect(() => {
-
     const timeout = setTimeout(() => {
-
       fetchTransactions();
-
     }, 300);
 
     return () => clearTimeout(timeout);
-
   }, [page, search]);
 
   return (
     <div className="space-y-8">
 
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-5">
+      {/* Header */}
+
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
 
         <div>
-
           <h1 className="text-3xl font-bold">
             Subscription Transactions
           </h1>
@@ -91,12 +71,11 @@ export default function AllTransactions() {
           <p className="text-default-500 mt-2">
             {totalTransactions} successful transactions
           </p>
-
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
 
-          <div className="relative">
+          <div className="relative flex-1">
 
             <Search
               size={18}
@@ -104,7 +83,7 @@ export default function AllTransactions() {
             />
 
             <input
-              className="w-72 border rounded-xl pl-10 pr-3 py-2"
+              className="w-full sm:w-72 border rounded-xl pl-10 pr-3 py-2"
               placeholder="Search transactions..."
               value={search}
               onChange={(e) => {
@@ -118,10 +97,9 @@ export default function AllTransactions() {
           <Button
             color="primary"
             variant="flat"
-            startContent={
-              <RefreshCw size={18} />
-            }
+            startContent={<RefreshCw size={18} />}
             onPress={fetchTransactions}
+            className="w-full sm:w-auto"
           >
             Refresh
           </Button>
@@ -132,28 +110,37 @@ export default function AllTransactions() {
 
       <div className="relative rounded-2xl border bg-content1 shadow-sm overflow-hidden">
 
-        {loading &&
-          transactions.length > 0 && (
+        {loading && transactions.length > 0 && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/50 backdrop-blur-sm">
+            <Spinner size="lg" />
+          </div>
+        )}
 
-            <div className="absolute inset-0 bg-white/50 backdrop-blur-sm flex justify-center items-center z-20">
+        <div className="overflow-x-auto rounded-2xl">
 
-              <Spinner size="lg" />
+          <table className="w-full min-w-[700px] lg:min-w-[900px]">
 
-            </div>
-
-          )}
-
-        <div className="overflow-x-auto">
-
-          <table className="min-w-[900px] w-full">
-
-            <thead className="bg-default-100 border-b">
+            <thead className="bg-default-100 border-b text-sm">
               <tr>
-                <th className="text-left p-4">Transaction ID</th>
-                <th className="text-left p-4">User/Lawyer Email</th>
-                <th className="text-left p-4">Type</th>
-                <th className="text-left p-4">Amount</th>
-                <th className="text-left p-4">Payment Date</th>
+                <th className="text-left p-4">
+                  Transaction ID
+                </th>
+
+                <th className="text-left p-4">
+                  User/Lawyer Email
+                </th>
+
+                <th className="text-left p-4">
+                  Type
+                </th>
+
+                <th className="text-left p-4">
+                  Amount
+                </th>
+
+                <th className="text-left p-4">
+                  Payment Date
+                </th>
               </tr>
             </thead>
 
@@ -167,80 +154,115 @@ export default function AllTransactions() {
               ) : transactions.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="py-20 text-center">
-                    <ReceiptText size={40} className="mx-auto mb-3 text-default-400" />
-                    <p className="text-default-500">No transactions found.</p>
+
+                    <ReceiptText
+                      size={46}
+                      className="mx-auto mb-4 text-default-400"
+                    />
+
+                    <h3 className="text-lg font-semibold">
+                      No Transactions Found
+                    </h3>
+
+                    <p className="text-default-500 mt-2">
+                      Try another search keyword.
+                    </p>
+
                   </td>
                 </tr>
               ) : (
                 transactions.map((tx) => (
-                  <tr key={tx._id} className="border-b hover:bg-default-50 transition">
+                  <tr
+                    key={tx._id}
+                    className="border-b hover:bg-default-50 transition"
+                  >
+
                     <td className="p-4">
-                      <div className="font-mono text-xs">
+
+                      <div className="font-mono text-xs break-all max-w-[180px]">
                         {tx.transactionId}
                       </div>
+
                     </td>
+
                     <td className="p-4">
-                      {tx.email || "N/A"}
+
+                      <div className="break-all">
+                        {tx.email || "N/A"}
+                      </div>
+
                     </td>
+
                     <td className="p-4">
-                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                        tx.type === "Verification" 
-                          ? "bg-blue-100 text-blue-700" 
-                          : "bg-purple-100 text-purple-700"
-                      }`}>
+
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-semibold ${tx.type === "Verification"
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-purple-100 text-purple-700"
+                          }`}
+                      >
                         {tx.type}
                       </span>
+
                     </td>
+
                     <td className="p-4">
+
                       <span className="font-bold text-green-600">
                         ${tx.amount ?? 0}
                       </span>
+
                     </td>
-                    <td className="p-4">
-                      {tx.paymentDate ? new Date(tx.paymentDate).toLocaleDateString() : "N/A"}
+
+                    <td className="p-4 whitespace-nowrap">
+
+                      {tx.paymentDate
+                        ? new Date(
+                          tx.paymentDate
+                        ).toLocaleDateString()
+                        : "N/A"}
+
                     </td>
+
                   </tr>
                 ))
               )}
             </tbody>
+
           </table>
 
         </div>
-
         {totalPages > 1 && (
+          <div className="border-t p-4 sm:p-5">
 
-          <div className="border-t p-5 flex justify-center gap-5">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
 
-            <Button
-              variant="flat"
-              isDisabled={page === 1}
-              onPress={() =>
-                setPage(page - 1)
-              }
-            >
-              Previous
-            </Button>
+              <Button
+                variant="flat"
+                isDisabled={page === 1}
+                onPress={() => setPage((prev) => prev - 1)}
+                className="w-full sm:w-auto"
+              >
+                Previous
+              </Button>
 
-            <span className="font-medium">
+              <span className="text-sm sm:text-base font-medium text-center">
+                Page <span className="font-bold">{page}</span> of{" "}
+                <span className="font-bold">{totalPages}</span>
+              </span>
 
-              Page {page} of {totalPages}
+              <Button
+                variant="flat"
+                isDisabled={page === totalPages}
+                onPress={() => setPage((prev) => prev + 1)}
+                className="w-full sm:w-auto"
+              >
+                Next
+              </Button>
 
-            </span>
-
-            <Button
-              variant="flat"
-              isDisabled={
-                page === totalPages
-              }
-              onPress={() =>
-                setPage(page + 1)
-              }
-            >
-              Next
-            </Button>
+            </div>
 
           </div>
-
         )}
 
       </div>
