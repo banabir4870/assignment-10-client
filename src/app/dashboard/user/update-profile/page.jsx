@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useSession } from "@/lib/auth-client";
+import { authClient, useSession } from "@/lib/auth-client";
 import { Button } from "@heroui/react";
 import toast from "react-hot-toast";
 
@@ -25,9 +25,15 @@ export default function UserUpdateProfilePage() {
         if (!session?.user) return;
 
         const fetchProfile = async () => {
+            const { data: tokenData } = await authClient.token()
             try {
                 const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_SERVER_URL}/user/profile/${session.user.id}`
+                    `${process.env.NEXT_PUBLIC_SERVER_URL}/user/profile/${session.user.id}`, {
+                    headers: {
+                        'content-type': 'application/json',
+                        authorization: `Bearer ${tokenData?.token}`
+                    }
+                }
                 );
 
                 const data = await res.json();
@@ -106,6 +112,7 @@ export default function UserUpdateProfilePage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const {data: tokenData} = await authClient.token()
 
         try {
             setSaving(true);
@@ -116,6 +123,7 @@ export default function UserUpdateProfilePage() {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
+                        authorization: `Bearer ${tokenData?.token}`
                     },
                     body: JSON.stringify({
                         userId: session.user.id,

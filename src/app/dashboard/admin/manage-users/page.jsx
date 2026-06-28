@@ -19,6 +19,7 @@ import {
 } from "@heroui/react";
 
 import { toast } from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 
 export default function ManageUsers() {
     const [users, setUsers] = useState([]);
@@ -36,11 +37,17 @@ export default function ManageUsers() {
     const [updatingId, setUpdatingId] = useState(null);
 
     const fetchUsers = async () => {
+        const {data: tokenData} = await authClient.token()
         try {
             setLoading(true);
 
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/users?page=${page}&limit=10&search=${encodeURIComponent(search)}`
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/users?page=${page}&limit=10&search=${encodeURIComponent(search)}`, {
+                headers: {
+                    'content-type': 'application/json',
+                    authorization: `Bearer ${tokenData?.token}`
+                }
+            }
             );
 
             const data = await res.json();
@@ -69,6 +76,7 @@ export default function ManageUsers() {
     }, [page, search]);
 
     const updateRole = async (id, role) => {
+        const { data: tokenData } = await authClient.token()
         try {
             setUpdatingId(id);
 
@@ -78,6 +86,7 @@ export default function ManageUsers() {
                     method: "PATCH",
                     headers: {
                         "Content-Type": "application/json",
+                        authorization: `Bearer ${tokenData?.token}`
                     },
                     body: JSON.stringify({ role }),
                 }
@@ -114,12 +123,17 @@ export default function ManageUsers() {
         );
 
         if (!ok) return;
+        const { data: tokenData } = await authClient.token()
 
         try {
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/users/${user._id}`,
                 {
                     method: "DELETE",
+                    headers: {
+                        'content-type': 'application/json',
+                        authorization: `Bearer ${tokenData?.token}`
+                    }
                 }
             );
 

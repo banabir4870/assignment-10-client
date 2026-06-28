@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useSession } from "@/lib/auth-client";
+import { authClient, useSession } from "@/lib/auth-client";
 import { Button } from "@heroui/react";
 import toast from "react-hot-toast";
 
@@ -16,12 +16,17 @@ export default function UserHiringHistory() {
     useEffect(() => {
         const fetchHistory = async () => {
             if (!session?.user?.id) return;
+            const {data: tokenData} = await authClient.token()
 
             try {
                 const res = await fetch(
                     `${process.env.NEXT_PUBLIC_SERVER_URL}/hirings/user/${session.user.id}`,
                     {
                         cache: "no-store",
+                        headers: {
+                            'content-type': 'application/json',
+                            authorization: `Bearer ${tokenData?.token}`
+                        }
                     }
                 );
 
@@ -61,6 +66,7 @@ export default function UserHiringHistory() {
     ).length;
 
     const handlePayment = async (hire) => {
+        const {data: tokenData} = await authClient.token()
         try {
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_URL}/create-checkout-session`,
@@ -68,6 +74,7 @@ export default function UserHiringHistory() {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        authorization: `Bearer ${tokenData?.token}`
                     },
                     body: JSON.stringify({
                         hireId: hire._id,
@@ -223,7 +230,7 @@ export default function UserHiringHistory() {
                                     <th className="py-4 text-left text-black">
                                         Lawyer
                                     </th>
-                                
+
 
                                     <th className="py-4 text-left text-black">
                                         Fee
@@ -331,7 +338,7 @@ export default function UserHiringHistory() {
 
                                             {item.status === "accepted" &&
                                                 item.paymentStatus ===
-                                                    "unpaid" && (
+                                                "unpaid" && (
                                                     <Button
                                                         color="primary"
                                                         onClick={() =>
@@ -344,7 +351,7 @@ export default function UserHiringHistory() {
 
                                             {item.status === "completed" &&
                                                 item.paymentStatus ===
-                                                    "paid" && (
+                                                "paid" && (
                                                     <span className="font-semibold text-green-600">
                                                         Payment Completed
                                                     </span>

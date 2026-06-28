@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "@/lib/auth-client";
+import { authClient, useSession } from "@/lib/auth-client";
 import { Button } from "@heroui/react";
 import { Star, Edit, Trash2, X } from "lucide-react";
 import Link from "next/link";
@@ -19,8 +19,14 @@ export default function UserCommentsPage() {
 
     const fetchComments = async () => {
         if (!session?.user?.id) return;
+        const {data: tokenData} = await authClient.token()
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/comments/user/${session.user.id}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/comments/user/${session.user.id}`,{
+                headers: {
+                'content-type': 'application/json',
+                authorization: `Bearer ${tokenData?.token}`
+            }
+            });
             const data = await res.json();
             if (data.success) {
                 setComments(data.comments);
@@ -38,9 +44,14 @@ export default function UserCommentsPage() {
 
     const handleDelete = async (id) => {
         if (!confirm("Are you sure you want to delete this review?")) return;
+        const {data: tokenData} = await authClient.token()
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/comments/${id}`, {
                 method: "DELETE",
+                headers: {
+                'content-type': 'application/json',
+                authorization: `Bearer ${tokenData?.token}`
+            }
             });
             const data = await res.json();
             if (data.success) {
@@ -58,10 +69,13 @@ export default function UserCommentsPage() {
     const handleSaveEdit = async () => {
         if (!editContent.trim()) return toast.error("Review cannot be empty");
         setSaveLoading(true);
+        const {data: tokenData} = await authClient.token()
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/comments/${editingComment._id}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json",
+                    authorization: `Bearer ${tokenData?.token}`
+                 },
                 body: JSON.stringify({
                     rating: editRating,
                     comment: editContent,

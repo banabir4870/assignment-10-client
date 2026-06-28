@@ -16,6 +16,9 @@ export default async function LawyerDashboard() {
     });
 
     const userId = session?.user?.id;
+    const { token } = await auth.api.getToken({
+        headers: await headers()
+    })
 
     // Lawyer Profile
     const profileRes = await fetch(
@@ -55,7 +58,7 @@ export default async function LawyerDashboard() {
     const hiringRes = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/hirings/lawyer/${userId}`,
         {
-            cache: "no-store",
+            cache: "no-store"
         }
     );
 

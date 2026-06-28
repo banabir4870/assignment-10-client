@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useSession } from "@/lib/auth-client";
+import { authClient, useSession } from "@/lib/auth-client";
 
 export default function HiringHistoryPage() {
     const { data: session } = useSession();
@@ -13,12 +13,17 @@ export default function HiringHistoryPage() {
     useEffect(() => {
         const fetchRequests = async () => {
             if (!session?.user?.id) return;
+            const { data: tokenData } = await authClient.token()
 
             try {
                 const res = await fetch(
                     `${process.env.NEXT_PUBLIC_SERVER_URL}/hirings/lawyer/${session.user.id}`,
                     {
                         cache: "no-store",
+                        headers: {
+                            'content-type': 'application/json',
+                            authorization: `Bearer ${tokenData?.token}`
+                        }
                     }
                 );
 
@@ -38,11 +43,16 @@ export default function HiringHistoryPage() {
     }, [session]);
 
     const handleAccept = async (id) => {
+        const { data: tokenData } = await authClient.token()
         try {
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_URL}/hirings/${id}/accept`,
                 {
                     method: "PATCH",
+                    headers: {
+                        'content-type': 'application/json',
+                        authorization: `Bearer ${tokenData?.token}`
+                    }
                 }
             );
 
@@ -63,11 +73,16 @@ export default function HiringHistoryPage() {
     };
 
     const handleReject = async (id) => {
+        const {data: tokenData} = await authClient.token()
         try {
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_URL}/hirings/${id}/reject`,
                 {
                     method: "PATCH",
+                    headers: {
+                        'content-type': 'application/json',
+                        authorization: `Bearer ${tokenData?.token}`
+                    }
                 }
             );
 
@@ -263,29 +278,29 @@ export default function HiringHistoryPage() {
                                             <td>
                                                 {request.status ===
                                                     "pending" && (
-                                                    <span className="rounded-full bg-yellow-100 px-3 py-1 text-sm text-yellow-700">
-                                                        Pending
-                                                    </span>
-                                                )}
+                                                        <span className="rounded-full bg-yellow-100 px-3 py-1 text-sm text-yellow-700">
+                                                            Pending
+                                                        </span>
+                                                    )}
 
                                                 {request.status ===
                                                     "accepted" && (
-                                                    <span className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700">
-                                                        Accepted
-                                                    </span>
-                                                )}
+                                                        <span className="rounded-full bg-green-100 px-3 py-1 text-sm text-green-700">
+                                                            Accepted
+                                                        </span>
+                                                    )}
 
                                                 {request.status ===
                                                     "rejected" && (
-                                                    <span className="rounded-full bg-red-100 px-3 py-1 text-sm text-red-700">
-                                                        Rejected
-                                                    </span>
-                                                )}
+                                                        <span className="rounded-full bg-red-100 px-3 py-1 text-sm text-red-700">
+                                                            Rejected
+                                                        </span>
+                                                    )}
                                             </td>
 
                                             <td>
                                                 {request.status ===
-                                                "pending" ? (
+                                                    "pending" ? (
                                                     <div className="flex gap-2">
 
                                                         <button

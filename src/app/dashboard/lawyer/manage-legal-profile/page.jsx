@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "@/lib/auth-client";
+import { authClient, useSession } from "@/lib/auth-client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -30,11 +30,17 @@ export default function ManageLegalProfilePage() {
     // -------------------------
     const fetchProfile = async (id) => {
         if (!id) return;
+        const {data: tokenData} = await authClient.token()
 
         try {
             setLoading(true);
 
-            const res = await fetch(`${SERVER_URL}/lawyer/profile/user/${id}`);
+            const res = await fetch(`${SERVER_URL}/lawyer/profile/user/${id}`,{
+                headers: {
+                'content-type': 'application/json',
+                authorization: `Bearer ${tokenData?.token}`
+            }
+            });
             const data = await res.json();
 
             if (data.exists) {
@@ -105,11 +111,13 @@ export default function ManageLegalProfilePage() {
             if (imageFile) {
                 imageUrl = await uploadToImgBB(imageFile);
             }
+            const {data: tokenData} = await authClient.token()
 
             await fetch(`${SERVER_URL}/lawyer/profile`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
+                    authorization: `Bearer ${tokenData?.token}`
                 },
                 body: JSON.stringify({
                     userId,

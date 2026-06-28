@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle2 } from "lucide-react";
 import { Button } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
 
 function SuccessContent() {
     const router = useRouter();
@@ -21,6 +22,7 @@ function SuccessContent() {
                 setLoading(false);
                 return;
             }
+            const {data: tokenData} = await authClient.token()
 
             try {
                 const res = await fetch(
@@ -29,6 +31,7 @@ function SuccessContent() {
                         method: "PATCH",
                         headers: {
                             "Content-Type": "application/json",
+                            authorization: `Bearer ${tokenData?.token}`
                         },
                         body: JSON.stringify({ hireId }),
                     }

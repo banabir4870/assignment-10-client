@@ -19,6 +19,7 @@ import {
     TrendingUp,
 } from "lucide-react";
 import { Spinner } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
 
 export default function AdminHomePage() {
     const [stats, setStats] = useState(null);
@@ -26,9 +27,15 @@ export default function AdminHomePage() {
 
     useEffect(() => {
         const fetchStats = async () => {
+            const {data: tokenData} = await authClient.token()
             try {
                 const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/analytics`
+                    `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/analytics`, {
+                    headers: {
+                        'content-type': 'application/json',
+                        authorization: `Bearer ${tokenData?.token}`
+                    }
+                }
                 );
                 const data = await res.json();
                 if (data.success) setStats(data.analytics);

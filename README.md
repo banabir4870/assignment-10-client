@@ -6,8 +6,7 @@ LegalEase is a premium, modern, and highly interactive web application designed 
 
 ## 🌐 Live URL & Local Setup
 
-- **Client Application URL (Local):** [http://localhost:3000](http://localhost:3000)
-- **Backend API URL (Local):** [http://localhost:5000](http://localhost:5000)
+- **Client Application URL (Live):** [https://leaglease-a10-client.vercel.app/](https://leaglease-a10-client.vercel.app/)
 - **Stripe Webhook / Checkout Integration:** Supported via Stripe sandbox environment.
 
 ### Getting Started

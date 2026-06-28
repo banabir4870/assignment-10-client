@@ -10,7 +10,7 @@ import {
     Users,
 } from "lucide-react";
 import { Button } from "@heroui/react";
-import { useSession } from "@/lib/auth-client";
+import { authClient, useSession } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 import { redirect } from "next/navigation";
 
@@ -52,8 +52,14 @@ export default function LawyerDetailsPage({ id }) {
 
                 // If user is logged in, check if they have a completed hiring
                 if (session?.user?.id) {
+                    const {data: tokenData} = await authClient.token()
                     const hiringsRes = await fetch(
-                        `${process.env.NEXT_PUBLIC_SERVER_URL}/hirings/user/${session.user.id}`
+                        `${process.env.NEXT_PUBLIC_SERVER_URL}/hirings/user/${session.user.id}`, {
+                        headers: {
+                            'content-type': 'application/json',
+                            authorization: `Bearer ${tokenData?.token}`
+                        }
+                    }
                     );
                     const hiringsData = await hiringsRes.json();
                     if (hiringsData.success) {
@@ -98,6 +104,7 @@ export default function LawyerDetailsPage({ id }) {
 
         try {
             setHireLoading(true);
+            const { data: tokenData } = await authClient.token()
 
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_SERVER_URL}/hire`,
@@ -105,6 +112,7 @@ export default function LawyerDetailsPage({ id }) {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        authorization: `Bearer ${tokenData?.token}`
                     },
                     body: JSON.stringify({
                         lawyerId: lawyer._id,

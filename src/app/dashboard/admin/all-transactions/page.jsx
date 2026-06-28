@@ -11,6 +11,7 @@ import {
   Spinner,
 } from "@heroui/react";
 import { toast } from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 
 export default function AllTransactions() {
   const [transactions, setTransactions] = useState([]);
@@ -26,11 +27,17 @@ export default function AllTransactions() {
     useState(0);
 
   const fetchTransactions = async () => {
+    const {data: tokenData} = await authClient.token()
     try {
       setLoading(true);
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/transactions?page=${page}&limit=10&search=${search}`
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/transactions?page=${page}&limit=10&search=${search}`, {
+        headers: {
+          'content-type': 'application/json',
+          authorization: `Bearer ${tokenData?.token}`
+        }
+      }
       );
 
       const data = await res.json();
@@ -197,8 +204,8 @@ export default function AllTransactions() {
 
                       <span
                         className={`rounded-full px-3 py-1 text-xs font-semibold ${tx.type === "Verification"
-                            ? "bg-blue-100 text-blue-700"
-                            : "bg-purple-100 text-purple-700"
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-purple-100 text-purple-700"
                           }`}
                       >
                         {tx.type}

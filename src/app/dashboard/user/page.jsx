@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "@/lib/auth-client";
+import { authClient, useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import {
     BriefcaseBusiness,
@@ -23,9 +23,15 @@ export default function UserHomePage() {
         if (!session?.user?.id) return;
 
         const fetchHirings = async () => {
+            const { data: tokenData } = await authClient.token()
             try {
                 const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_SERVER_URL}/hirings/user/${session.user.id}`
+                    `${process.env.NEXT_PUBLIC_SERVER_URL}/hirings/user/${session.user.id}`, {
+                    headers: {
+                        'content-type': 'application/json',
+                        authorization: `Bearer ${tokenData?.token}`
+                    }
+                }
                 );
 
                 const data = await res.json();
