@@ -13,6 +13,7 @@ import { Check } from "@gravity-ui/icons";
 // import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 
 export default function LoginPage() {
@@ -28,17 +29,16 @@ export default function LoginPage() {
         })
 
         if (data) {
-            alert('LogIn Successfully.')
+            toast.success('LogIn Successfully.')
         }
         if (error) {
-            alert(`${error.message}`)
+            toast.error(`${error.message}`)
         }
     };
 
     const handleGoogleSignIn = async () => {
         await authClient.signIn.social({
             provider: "google",
-            callbackURL: "/auth/google-sync",
         });
     };
 

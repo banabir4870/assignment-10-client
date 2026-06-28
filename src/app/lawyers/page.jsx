@@ -247,7 +247,7 @@ const BrowseLawyersPage = () => {
 
                                 <div className="group bg-content1 border rounded-3xl overflow-hidden h-full transition duration-300 hover:-translate-y-2 hover:shadow-xl">
 
-                                    <div className="relative h-64">
+                                    <div className="relative h-80">
 
                                         <Image
                                             src={lawyer.image}

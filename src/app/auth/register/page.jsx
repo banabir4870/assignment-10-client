@@ -48,6 +48,12 @@ export default function RegisterPage() {
 
   };
 
+  const handleGoogleSignIn = async () => {
+  const data = await authClient.signIn.social({
+    provider: "google",
+  });
+};
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0F172A] px-4">
 
@@ -113,7 +119,7 @@ export default function RegisterPage() {
         <Button
           variant="secondary"
           className="w-full text-lg hover:bg-[#ab8635] hover:text-white transition"
-          onClick={() => signIn("google")}
+          onClick={handleGoogleSignIn}
         >
           Continue with Google
         </Button>

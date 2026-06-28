@@ -18,7 +18,7 @@ export default function LawyerDetailsPage({ id }) {
     const [lawyer, setLawyer] = useState(null);
     const [loading, setLoading] = useState(true);
     const [hireLoading, setHireLoading] = useState(false);
-    
+
     // Comments states
     const [comments, setComments] = useState([]);
     const [userHire, setUserHire] = useState(null);
@@ -131,7 +131,7 @@ export default function LawyerDetailsPage({ id }) {
             <div className="max-w-7xl mx-auto px-4 py-10">
                 <div className="animate-pulse">
                     <div className="grid lg:grid-cols-2 gap-10">
-                        <div className="h-[550px] rounded-3xl bg-gray-200"></div>
+                        <div className="h-137.5 rounded-3xl bg-gray-200"></div>
 
                         <div className="space-y-5">
                             <div className="h-12 bg-gray-200 rounded"></div>
@@ -163,12 +163,12 @@ export default function LawyerDetailsPage({ id }) {
 
             <div className="grid lg:grid-cols-2 gap-10">
 
-                <div className="relative h-[550px] rounded-3xl overflow-hidden border">
+                <div className="relative h-137.5 rounded-3xl overflow-hidden border">
                     <Image
                         src={lawyer.image}
                         alt={lawyer.fullName}
                         fill
-                        className="object-cover"
+                        className="object-cover object-top"
                     />
                 </div>
 
@@ -185,11 +185,10 @@ export default function LawyerDetailsPage({ id }) {
 
                     <div className="mt-6">
                         <span
-                            className={`px-4 py-2 rounded-full text-white ${
-                                lawyer.availability === "Available"
+                            className={`px-4 py-2 rounded-full text-white ${lawyer.availability === "Available"
                                     ? "bg-green-600"
                                     : "bg-red-500"
-                            }`}
+                                }`}
                         >
                             {lawyer.availability}
                         </span>
@@ -261,10 +260,10 @@ export default function LawyerDetailsPage({ id }) {
                         {hireLoading
                             ? "Sending Request..."
                             : isOwnProfile
-                            ? "This Is Your Profile"
-                            : isLawyer
-                            ? "Lawyers Cannot Hire"
-                            : "Hire This Lawyer"}
+                                ? "This Is Your Profile"
+                                : isLawyer
+                                    ? "Lawyers Cannot Hire"
+                                    : "Hire This Lawyer"}
                     </Button>
 
                 </div>

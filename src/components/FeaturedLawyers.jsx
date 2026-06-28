@@ -71,7 +71,7 @@ export default function FeaturedLawyers() {
     }, []);
     return (
         <section className="py-20">
-            <div className="container mx-auto px-4">
+            <div className="w-8/12 mx-auto px-4">
 
                 {/* Section Header */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-12">
@@ -130,12 +130,12 @@ export default function FeaturedLawyers() {
                                 className="overflow-hidden rounded-3xl border border-default-200 bg-content1 shadow-sm"
                             >
                                 {/* Image */}
-                                <div className="relative h-64 overflow-hidden">
+                                <div className="relative h-80 overflow-hidden">
                                     <Image
                                         src={lawyer.image}
                                         alt={lawyer.fullName}
                                         fill
-                                        className="object-cover transition duration-500 hover:scale-110"
+                                        className="object-cover object-top transition duration-500 hover:scale-105"
                                     />
 
                                     <div className="absolute left-4 top-4 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-blue-500 flex items-center gap-1">

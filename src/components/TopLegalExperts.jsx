@@ -45,7 +45,7 @@ export default function TopLegalExperts() {
 
     return (
         <section className="py-20">
-            <div className="container mx-auto px-5">
+            <div className="w-8/12 mx-auto px-5">
 
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
@@ -94,7 +94,7 @@ export default function TopLegalExperts() {
                                     src={lawyer.image}
                                     alt={lawyer.fullName}
                                     fill
-                                    className="object-cover"
+                                    className="object-cover object-top"
                                 />
 
                             </div>
