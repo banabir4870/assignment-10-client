@@ -14,6 +14,7 @@ import { Check } from "@gravity-ui/icons";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 
+
 export default function LoginPage() {
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -34,53 +35,60 @@ export default function LoginPage() {
         }
     };
 
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-[#0F172A] px-4">
+    const handleGoogleSignIn = async () => {
+        await authClient.signIn.social({
+            provider: "google",
+            callbackURL: "/auth/google-sync",
+        });
+    };
 
-                <div className="w-full max-w-md bg-[#1E293B] p-8 rounded-2xl border border-white/10 my-10">
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-[#0F172A] px-4">
 
-                    <h2 className="text-2xl font-bold text-white text-center">
-                        Login to <span className="text-[#C9A65B]">Legal<span className="text-white">Ease</span></span>
-                    </h2>
+            <div className="w-full max-w-md bg-[#1E293B] p-8 rounded-2xl border border-white/10 my-10">
 
-                    <Form className="flex flex-col gap-4 mt-6" onSubmit={onSubmit}>
+                <h2 className="text-2xl font-bold text-white text-center">
+                    Login to <span className="text-[#C9A65B]">Legal<span className="text-white">Ease</span></span>
+                </h2>
 
-                        <TextField isRequired name="email" type="email">
-                            <Label className="text-white">Email</Label>
-                            <Input placeholder="Enter Your Email" />
-                            <FieldError />
-                        </TextField>
+                <Form className="flex flex-col gap-4 mt-6" onSubmit={onSubmit}>
 
-                        <TextField isRequired name="password" type="password">
-                            <Label className="text-white">Password</Label>
-                            <Input placeholder="Enter Your Password" />
-                            <FieldError />
-                        </TextField>
+                    <TextField isRequired name="email" type="email">
+                        <Label className="text-white">Email</Label>
+                        <Input placeholder="Enter Your Email" />
+                        <FieldError />
+                    </TextField>
 
-                        <Button type="submit" className="bg-[#C9A65B] text-lg text-white w-full hover:bg-[#ab8635] transition">
-                            <Check /> Login
-                        </Button>
+                    <TextField isRequired name="password" type="password">
+                        <Label className="text-white">Password</Label>
+                        <Input placeholder="Enter Your Password" />
+                        <FieldError />
+                    </TextField>
 
-                    </Form>
-
-                    <div className="my-5 text-center text-gray-400">OR</div>
-
-                    <Button
-                        variant="secondary"
-                        className="w-full text-lg hover:bg-[#ab8635] hover:text-white transition"
-                        onClick={() => signIn("google")}
-                    >
-                        Continue with Google
+                    <Button type="submit" className="bg-[#C9A65B] text-lg text-white w-full hover:bg-[#ab8635] transition">
+                        <Check /> Login
                     </Button>
 
-                    <p className="text-sm text-gray-400 text-center mt-5">
-                        Don’t have account?{" "}
-                        <Link href="/auth/register" className="text-[#C9A65B]">
-                            Register
-                        </Link>
-                    </p>
+                </Form>
 
-                </div>
+                <div className="my-5 text-center text-gray-400">OR</div>
+
+                <Button
+                    variant="secondary"
+                    className="w-full text-lg hover:bg-[#ab8635] hover:text-white transition"
+                    onClick={handleGoogleSignIn}
+                >
+                    Continue with Google
+                </Button>
+
+                <p className="text-sm text-gray-400 text-center mt-5">
+                    Don’t have account?{" "}
+                    <Link href="/auth/register" className="text-[#C9A65B]">
+                        Register
+                    </Link>
+                </p>
+
             </div>
-        );
-    }
+        </div>
+    );
+}
