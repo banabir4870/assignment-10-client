@@ -12,6 +12,7 @@ import {
 import { Button } from "@heroui/react";
 import { useSession } from "@/lib/auth-client";
 import toast from "react-hot-toast";
+import { redirect } from "next/navigation";
 
 export default function LawyerDetailsPage({ id }) {
     const { data: session } = useSession();
@@ -77,7 +78,7 @@ export default function LawyerDetailsPage({ id }) {
     const handleHire = async () => {
         if (!session?.user) {
             toast.error("Please login first");
-            return;
+            redirect('/auth/login')
         }
 
         if (session.user.role === "lawyer") {
