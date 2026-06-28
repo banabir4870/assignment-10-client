@@ -44,7 +44,7 @@ export default function AdminHomePage() {
     return (
         <div className="space-y-8">
             {/* Welcome Banner */}
-            <div className="rounded-3xl bg-gradient-to-r from-primary to-amber-400 p-8 text-black">
+            <div className="rounded-3xl bg-linear-to-r  from-amber-400 to-primary p-8 text-black">
                 <div className="flex items-center gap-3 mb-3">
                     <Shield size={32} className="text-black/70" />
                     <span className="text-sm font-semibold uppercase tracking-widest opacity-70">
@@ -67,7 +67,7 @@ export default function AdminHomePage() {
                 <>
                     {/* Primary Metrics */}
                     <div>
-                        <h2 className="text-lg font-semibold text-white/70 mb-4 uppercase tracking-wider text-sm">
+                        <h2 className="font-semibold text-white/70 mb-4 uppercase tracking-wider text-sm">
                             Platform Overview
                         </h2>
                         <div className="grid gap-4 grid-cols-2 xl:grid-cols-4">

@@ -130,7 +130,7 @@ export default function AdminAnalytics() {
 
             {/* Summary Cards */}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 text-black">
 
                 <Card>
 
@@ -159,7 +159,7 @@ export default function AdminAnalytics() {
 
                 <Card>
 
-                    <div className="flex flex-row items-center gap-4">
+                    <div className="flex flex-row items-center gap-4 text-black">
 
                         <Users
                             size={36}
@@ -262,7 +262,7 @@ export default function AdminAnalytics() {
             {/* Charts Section Starts Here */}
             {/* Charts */}
 
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 text-black">
 
                 {/* Hiring Status */}
 
