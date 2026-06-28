@@ -9,42 +9,6 @@ LegalEase is a premium, modern, and highly interactive web application designed 
 - **Client Application URL (Live):** [https://leaglease-a10-client.vercel.app/](https://leaglease-a10-client.vercel.app/)
 - **Stripe Webhook / Checkout Integration:** Supported via Stripe sandbox environment.
 
-### Getting Started
-
-To run the application locally, follow these steps:
-
-1. **Clone the repository and navigate to the client folder:**
-   ```bash
-   cd assignment-10-client
-   ```
-
-2. **Install the dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Configure Environment Variables:**
-   Create a `.env` file in the root directory (based on `.env.example` or variables mentioned below):
-   ```env
-   BETTER_AUTH_SECRET=your_auth_secret
-   BETTER_AUTH_URL=http://localhost:3000
-   MONGODB_URI=your_mongodb_connection_string
-   DB_NAME=legalEase
-   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
-   STRIPE_SECRET_KEY=your_stripe_secret_key
-   NEXT_PUBLIC_SERVER_URL=http://localhost:5000
-   NEXT_PUBLIC_IMGBB_KEY=your_imgbb_api_key
-   GOOGLE_CLIENT_ID=your_google_client_id
-   GOOGLE_CLIENT_SECRET=your_google_client_secret
-   ```
-
-4. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-
----
-
 ## 🎯 Project Purpose
 
 Navigating legal challenges and finding the right attorney can be overwhelming and costly. **LegalEase** simplifies this process by providing:
